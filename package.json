@@ -1,0 +1,35 @@
+{
+  "name": "cancela-automatica-api",
+  "version": "1.0.0",
+  "description": "Api para o sistema da cancela automática",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/strugglingoncalculus/cancela-automatica-api.git"
+  },
+  "author": "Luis Fernando Olkuszewski; Adenilson Castro",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/strugglingoncalculus/cancela-automatica-api/issues"
+  },
+  "homepage": "https://github.com/strugglingoncalculus/cancela-automatica-api#readme",
+  "dependencies": {
+    "bcryptjs": "*",
+    "body-parser": "*",
+    "connect-flash": "*",
+    "cookie-parser": "^1.4.1",
+    "express": "*",
+    "express-handlebars": "*",
+    "express-messages": "*",
+    "express-session": "*",
+    "express-validator": "*",
+    "mongodb": "*",
+    "mongoose": "*",
+    "passport": "*",
+    "passport-http": "*",
+    "passport-local": "*"
+  }
+}
