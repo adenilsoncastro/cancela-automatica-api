@@ -21,15 +21,16 @@
     "body-parser": "*",
     "connect-flash": "*",
     "cookie-parser": "^1.4.1",
+    "dotenv": "^5.0.1",
     "express": "*",
-    "express-handlebars": "*",
     "express-messages": "*",
-    "express-session": "*",
     "express-validator": "*",
+    "jwt-simple": "^0.5.1",
     "mongodb": "*",
     "mongoose": "*",
-    "passport": "*",
+    "passport": "^0.4.0",
     "passport-http": "*",
+    "passport-jwt": "^4.0.0",
     "passport-local": "*"
   }
 }
