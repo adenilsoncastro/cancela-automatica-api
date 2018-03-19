@@ -53,6 +53,8 @@ router.post('/register', function (req, res) {
     req.checkBody('password2', 'A confirmação da senha é obrigatório').notEmpty();
     req.checkBody('password2', 'As senhas não conferem').equals(req.body.password);
 
+    var errors = req.validationErrors();
+
     if (req.validationErrors()) {
         return res.send(errors);
     }
