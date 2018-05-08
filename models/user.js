@@ -14,6 +14,15 @@ var UserSchema = mongoose.Schema({
     },
     name: {
         type: String
+    },
+    marca: {
+        type: String
+    },
+    modelo: {
+        type: String
+    },
+    placa: {
+        type: String
     }
 });
 
@@ -34,6 +43,13 @@ module.exports.getUserByUsernameAndPassword = function (username, password, call
 module.exports.getUserByUsername = function (username, callback) {
     var query = {
         username: username
+    };
+    User.findOne(query, callback);
+}
+
+module.exports.getUserByPlate = function (placa, callback) {
+    var query = {
+        placa: placa
     };
     User.findOne(query, callback);
 }

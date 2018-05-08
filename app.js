@@ -3,6 +3,7 @@ var bodyParser = require('body-parser');
 var expressValidator = require('express-validator');
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
+var cors = require('cors')
 const jwt = require('jsonwebtoken');
 
 mongoose.connect('mongodb://localhost/loginapp');
@@ -12,6 +13,7 @@ var users = require('./routes/users');
 
 var app = express();
 
+app.use(cors())
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: false
