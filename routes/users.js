@@ -60,6 +60,8 @@ router.post('/register', function (req, res) {
     req.checkBody('modelo', 'O modelo é obrigatório').notEmpty();
     req.checkBody('placa', 'A placa é obrigatório').notEmpty();
 
+    var errors = req.validationErrors();
+
     if (req.validationErrors()) {
         return res.send(errors);
     }
