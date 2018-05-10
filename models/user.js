@@ -12,6 +12,7 @@ var UserSchema = mongoose.Schema({
     email: {
         type: String
     },
+    // car: [{type: mongoose.Schema.Types.ObjectId, ref: 'Car'}]
     name: {
         type: String
     },
@@ -47,9 +48,9 @@ module.exports.getUserByUsername = function (username, callback) {
     User.findOne(query, callback);
 }
 
-module.exports.getUserByPlate = function (placa, callback) {
+module.exports.getUserByPlate = function (platenumber, callback) {
     var query = {
-        placa: placa
+        placa: platenumber
     };
     User.findOne(query, callback);
 }

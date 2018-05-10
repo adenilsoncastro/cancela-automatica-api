@@ -10,6 +10,7 @@ mongoose.connect('mongodb://localhost/loginapp');
 var db = mongoose.connection;
 
 var users = require('./routes/users');
+var plates = require('./routes/plates');
 var index = require('./routes/index');
 
 var app = express();
@@ -38,6 +39,7 @@ app.use(expressValidator({
 }));
 
 app.use('/users', users);
+app.use('/plates', plates);
 app.use('/', index);
 
 app.set('port', (process.env.PORT || 8080));
