@@ -45,25 +45,25 @@ router.post('/register', function (req, res) {
     var email = req.body.email;
     var username = req.body.username;
     var password = req.body.password;
-    var password2 = req.body.password2;
-    var marca = req.body.marca;
-    var modelo = req.body.modelo;
-    var placa = req.body.placa;
+    var passwordConfirmation = req.body.passwordConfirmation;
+    var marca = req.body.car.marca;
+    var modelo = req.body.car.modelo;
+    var placa = req.body.car.placa;
 
     req.checkBody('name', 'Nome é obrigatório').notEmpty();
     req.checkBody('email', 'E-mail é obrigatório').notEmpty();
     req.checkBody('username', 'Nome de usuário é obrigatório').notEmpty();
     req.checkBody('password', 'A senha é obrigatório').notEmpty();
-    req.checkBody('password confirmation', 'A confirmação da senha é obrigatório').notEmpty();
-    req.checkBody('password confirmation', 'As senhas não conferem').equals(req.body.password);
-    req.checkBody('marca', 'A marca é obrigatória').notEmpty();
-    req.checkBody('modelo', 'O modelo é obrigatório').notEmpty();
-    req.checkBody('placa', 'A placa é obrigatório').notEmpty();
+    req.checkBody('passwordConfirmation', 'A confirmação da senha é obrigatório').notEmpty();
+    req.checkBody('passwordConfirmation', 'As senhas não conferem').equals(req.body.password);
+    req.checkBody('car.marca', 'A marca é obrigatória').notEmpty();
+    req.checkBody('car.modelo', 'O modelo é obrigatório').notEmpty();
+    req.checkBody('car.placa', 'A placa é obrigatório').notEmpty();
 
     var errors = req.validationErrors();
 
     if (req.validationErrors()) {
-        return res.send(errors);
+        return res.send({success: false, error: errors});
     }
 
     User.getUserByUsername(username, (err, user) => {
@@ -93,6 +93,8 @@ router.post('/register', function (req, res) {
                 modelo: modelo,
                 placa: placa
             });
+
+            console.log(newUser);
 
             User.createUser(newUser, function (err, user) {
                 if (err) throw err;
