@@ -27,14 +27,28 @@ router.post('/login', (req, res) => {
         console.log('username: ' + username);
         console.log('password: ' + password);
         console.log('usertype: ' + usertype);
-        User.getUserByUsernameAndPassword(username, password, usertype,function (err, user) {
+        User.getUserByUsernameAndPassword(username, password, usertype, function (err, user) {
             if (err)
                 throw err;
             if (!user) {
-                res.send('Usuário não encontrado');
+                return res.json({
+                    success: false,
+                    error: [{
+                        msg: 'Usuário não encontrado.'
+                    }]
+                })
             } else {
-                jwt.sign({
-                    user
+                jwt.sign({'user':{
+                    'username': user.username,
+                    'password': user.password,
+                    'email': user.email,
+                    'name': user.name,
+                    'car': {
+                        'marca': user.marca,
+                        'modelo': user.modelo,
+                        'placa': user.placa
+                    }
+                }
                 }, process.env.JWT_KEY, {
                     expiresIn: '1d'
                 }, (err, token) => {
@@ -74,7 +88,10 @@ router.post('/register', function (req, res) {
     var errors = req.validationErrors();
 
     if (req.validationErrors()) {
-        return res.send({success: false, error: errors});
+        return res.send({
+            success: false,
+            error: errors
+        });
     }
 
     User.getUserByUsername(username, (err, user) => {
@@ -82,7 +99,10 @@ router.post('/register', function (req, res) {
 
         if (user) {
             return res.json({
-                message: 'Nome de usuário já cadastrado'
+                success: false,
+                error: [{
+                    msg: 'Nome de usuário já cadastrado.'
+                }]
             })
         }
 
@@ -91,7 +111,10 @@ router.post('/register', function (req, res) {
 
             if (user) {
                 return res.json({
-                    message: 'Placa já cadastrada'
+                    success: false,
+                    error: [{
+                        msg: 'Placa já cadastrado.'
+                    }]
                 })
             }
 
@@ -112,6 +135,7 @@ router.post('/register', function (req, res) {
                 if (err) throw err;
                 console.log(user);
                 return res.json({
+                    success: true,
                     message: 'Usuário cadastrado com sucesso'
                 });
             });
