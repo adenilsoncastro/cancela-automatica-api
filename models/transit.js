@@ -20,7 +20,7 @@ module.exports.create = function (newTransit, callback) {
     newTransit.save(callback);
 };
 
-module.exports.getUserByUserId = function (userId, callback) {
+module.exports.geByUserId = function (userId, callback) {
     var query = {
         userId: userId,
     };

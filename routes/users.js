@@ -10,20 +10,28 @@ router.post('/login', (req, res) => {
 
     var username = req.body.username;
     var password = req.body.password;
+    var usertype = req.body.usertype;
 
-    req.checkBody('username', 'Username is required').notEmpty();
-    req.checkBody('password', 'Password is required').notEmpty();
+    console.log(req.body)
+
+    req.checkBody('username', 'O nome de usuário é obrigatório').notEmpty();
+    req.checkBody('password', 'A senha é obrigatória').notEmpty();
+    req.checkBody('usertype', 'O tipo de usuário é obrigatório').notEmpty();
 
     var errors = req.validationErrors();
 
     if (errors) {
         res.send(errors);
     } else {
-        User.getUserByUsernameAndPassword(username, password, function (err, user) {
+        console.log('tentando logar: ');
+        console.log('username: ' + username);
+        console.log('password: ' + password);
+        console.log('usertype: ' + usertype);
+        User.getUserByUsernameAndPassword(username, password, usertype,function (err, user) {
             if (err)
                 throw err;
             if (!user) {
-                res.send('Usuario nao encontrado');
+                res.send('Usuário não encontrado');
             } else {
                 jwt.sign({
                     user
@@ -40,12 +48,14 @@ router.post('/login', (req, res) => {
 });
 
 router.post('/register', function (req, res) {
+    console.log('tentando registrar')
     console.log(req.body)
     var name = req.body.name;
     var email = req.body.email;
     var username = req.body.username;
     var password = req.body.password;
     var passwordConfirmation = req.body.passwordConfirmation;
+    var usertype = req.body.usertype;
     var marca = req.body.car.marca;
     var modelo = req.body.car.modelo;
     var placa = req.body.car.placa;
@@ -56,6 +66,7 @@ router.post('/register', function (req, res) {
     req.checkBody('password', 'A senha é obrigatório').notEmpty();
     req.checkBody('passwordConfirmation', 'A confirmação da senha é obrigatório').notEmpty();
     req.checkBody('passwordConfirmation', 'As senhas não conferem').equals(req.body.password);
+    req.checkBody('usertype', 'O tipo de usuário é obrigatório').notEmpty();
     req.checkBody('car.marca', 'A marca é obrigatória').notEmpty();
     req.checkBody('car.modelo', 'O modelo é obrigatório').notEmpty();
     req.checkBody('car.placa', 'A placa é obrigatório').notEmpty();
@@ -91,7 +102,8 @@ router.post('/register', function (req, res) {
                 password: password,
                 marca: marca,
                 modelo: modelo,
-                placa: placa
+                placa: placa,
+                usertype: usertype
             });
 
             console.log(newUser);

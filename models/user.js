@@ -24,20 +24,27 @@ var UserSchema = mongoose.Schema({
     },
     placa: {
         type: String
+    },
+    usertype: {
+        type: Number
     }
 });
 
 var User = module.exports = mongoose.model('User', UserSchema);
 
 module.exports.createUser = function (newUser, callback) {
+    console.log(newUser)
     newUser.save(callback);
 };
 
-module.exports.getUserByUsernameAndPassword = function (username, password, callback) {
+module.exports.getUserByUsernameAndPassword = function (username, password, usertype,callback) {
     var query = {
         username: username,
-        password: password
+        password: password,
+        usertype: usertype
     };
+    console.log('query: ')
+    console.log(query)
     User.findOne(query, callback);
 }
 
