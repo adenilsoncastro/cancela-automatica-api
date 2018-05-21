@@ -38,7 +38,9 @@ router.post('/login', (req, res) => {
                     }]
                 })
             } else {
+                console.log(user._id)
                 jwt.sign({'user':{
+                    '_id': user._id,
                     'username': user.username,
                     'password': user.password,
                     'email': user.email,

@@ -2,6 +2,9 @@ var mongoose = require('mongoose');
 var bcrypt = require('bcryptjs');
 
 var UserSchema = mongoose.Schema({
+    _id: {
+        type: String
+    },
     username: {
         type: String,
         index: true
@@ -59,6 +62,7 @@ module.exports.getUserByPlate = function (platenumber, callback) {
     var query = {
         placa: platenumber
     };
+    console.log(query)
     User.findOne(query, callback);
 }
 

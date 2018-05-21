@@ -7,22 +7,30 @@ var Transit = require('../models/transit')
 const checkAuth = require('../middleware/check-auth');
 const jwt = require('jsonwebtoken');
 
-router.get('/checkforexistence', (req, res) => {
+router.post('/checkforexistence', (req, res) => {
 
-    var plateNumber = req.body.plateNumber;
+    console.log('check for existence:')
+    console.log(req.body)
+    console.log(req.body.plate)
+    var plate = req.body.plate;
 
-    req.checkBody('platenumber', 'O número da placa é obrigatório').notEmpty();
+    req.checkBody('plate', 'O número da placa é obrigatório').notEmpty();
 
     var errors = req.validationErrors();
 
     if (errors) {
         res.send(errors);
     } else {
-        User.getUserByPlate(plateNumber, function (err, user) {
+        User.getUserByPlate(plate, function (err, user) {
             if (err)
                 throw err;
             if (!user) {
-                res.send('Placa não encontrada');
+                return res.json({
+                    success: false,
+                    error: [{
+                        msg: 'Placa não encontrada.'
+                    }]
+                })
             } else {
                 var newTransit = new Transit({
                     userId : user._id,
@@ -35,9 +43,11 @@ router.get('/checkforexistence', (req, res) => {
                     console.log(transit);
                 });
 
-                res.json({
-                    user
-                });
+                return res.json({
+                    success: true,
+                    user: user,
+                    error: []
+                })
             }
         });
     }
