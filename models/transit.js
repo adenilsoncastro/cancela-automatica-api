@@ -7,7 +7,10 @@ var TransitSchema = mongoose.Schema({
         index: true
     },
     automaticBarrierId: {
-        type: Date
+        type: Number
+    },
+    automaticBarrierLocatioName: {
+        type: String
     },
     date: {
         type: Date
@@ -17,10 +20,11 @@ var TransitSchema = mongoose.Schema({
 var Transit = module.exports = mongoose.model('Transit', TransitSchema);
 
 module.exports.create = function (newTransit, callback) {
+    console.log(newTransit)
     newTransit.save(callback);
 };
 
-module.exports.geByUserId = function (userId, callback) {
+module.exports.getByUserId = function (userId, callback) {
     var query = {
         userId: userId,
     };

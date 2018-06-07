@@ -2,9 +2,10 @@ var express = require('express');
 var router = express.Router();
 
 var User = require('../models/user');
-
+var constant = require('../helpers/constants')
 const checkAuth = require('../middleware/check-auth');
 const jwt = require('jsonwebtoken');
+
 
 router.post('/login', (req, res) => {
 
@@ -51,7 +52,7 @@ router.post('/login', (req, res) => {
                         'placa': user.placa
                     }
                 }
-                }, process.env.JWT_KEY, {
+                }, constant.JWT_PUBLIC_KEY, {
                     expiresIn: '1d'
                 }, (err, token) => {
                     res.json({

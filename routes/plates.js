@@ -33,9 +33,10 @@ router.post('/checkforexistence', (req, res) => {
                 })
             } else {
                 var newTransit = new Transit({
-                    userId : user._id,
-                    automaticBarrierId : 1,
-                    date : new Date()
+                    userId: user._id,
+                    automaticBarrierId: 1,
+                    automaticBarrierLocatioName: 'Universidade Positivo',
+                    date: new Date()
                 })
 
                 Transit.create(newTransit, function (err, transit) {
