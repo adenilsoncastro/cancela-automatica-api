@@ -9,10 +9,11 @@ const jwt = require('jsonwebtoken');
 mongoose.connect('mongodb://localhost/loginapp');
 var db = mongoose.connection;
 
-var users = require('./routes/users');
-var plates = require('./routes/plates');
-var transits = require('./routes/transits');
-var index = require('./routes/index');
+var users = require('./routes/users-controller');
+var plates = require('./routes/plates-controller');
+var transits = require('./routes/transits-controller');
+var qrcode = require('./routes/qrcode-controller');
+var index = require('./routes/index-controller');
 
 var app = express();
 
@@ -42,6 +43,7 @@ app.use(expressValidator({
 app.use('/users', users);
 app.use('/plates', plates);
 app.use('/transits', transits)
+app.use('/qrcode', qrcode)
 app.use('/', index);
 
 app.set('port', (process.env.PORT || 8080));

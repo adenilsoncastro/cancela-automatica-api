@@ -6,6 +6,9 @@ var TransitSchema = mongoose.Schema({
         type: String,
         index: true
     },
+    img: { 
+        type: String
+    },
     automaticBarrierId: {
         type: Number
     },

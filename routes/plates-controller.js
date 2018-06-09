@@ -1,18 +1,16 @@
 var express = require('express');
 var router = express.Router();
-
 var User = require('../models/user');
 var Transit = require('../models/transit')
-
 const checkAuth = require('../middleware/check-auth');
 const jwt = require('jsonwebtoken');
+const multer = require('multer')
 
 router.post('/checkforexistence', (req, res) => {
 
     console.log('check for existence:')
-    console.log(req.body)
-    console.log(req.body.plate)
     var plate = req.body.plate;
+    var img = req.body.img;
 
     req.checkBody('plate', 'O número da placa é obrigatório').notEmpty();
 
@@ -34,6 +32,7 @@ router.post('/checkforexistence', (req, res) => {
             } else {
                 var newTransit = new Transit({
                     userId: user._id,
+                    img: img,
                     automaticBarrierId: 1,
                     automaticBarrierLocatioName: 'Universidade Positivo',
                     date: new Date()
