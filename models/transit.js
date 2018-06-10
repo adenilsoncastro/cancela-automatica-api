@@ -1,12 +1,13 @@
 var mongoose = require('mongoose');
 var bcrypt = require('bcryptjs');
+var moment = require('moment')
 
 var TransitSchema = mongoose.Schema({
     userId: {
         type: String,
         index: true
     },
-    img: { 
+    img: {
         type: String
     },
     automaticBarrierId: {
@@ -32,4 +33,18 @@ module.exports.getByUserId = function (userId, callback) {
         userId: userId,
     };
     Transit.find(query, callback);
+}
+
+module.exports.getCountByToday = function (userId, callback) {
+    var today = moment().startOf('day')
+    var tomorrow = moment(today).add(1, 'days')
+
+    var query = {
+        userId: userId,
+        date: {
+            $gte: today,
+            $lt: tomorrow
+        }
+    };
+    Transit.count(query, callback);
 }
