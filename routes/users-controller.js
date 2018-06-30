@@ -80,13 +80,13 @@ router.post('/register', function (req, res) {
     req.checkBody('name', 'Nome é obrigatório').notEmpty();
     req.checkBody('email', 'E-mail é obrigatório').notEmpty();
     req.checkBody('username', 'Nome de usuário é obrigatório').notEmpty();
-    req.checkBody('password', 'A senha é obrigatório').notEmpty();
-    req.checkBody('passwordConfirmation', 'A confirmação da senha é obrigatório').notEmpty();
+    req.checkBody('password', 'A senha é obrigatória').notEmpty();
+    req.checkBody('passwordConfirmation', 'A confirmação da senha é obrigatória').notEmpty();
     req.checkBody('passwordConfirmation', 'As senhas não conferem').equals(req.body.password);
     req.checkBody('usertype', 'O tipo de usuário é obrigatório').notEmpty();
     req.checkBody('car.marca', 'A marca é obrigatória').notEmpty();
     req.checkBody('car.modelo', 'O modelo é obrigatório').notEmpty();
-    req.checkBody('car.placa', 'A placa é obrigatório').notEmpty();
+    req.checkBody('car.placa', 'A placa é obrigatória').notEmpty();
 
     var errors = req.validationErrors();
 
@@ -116,7 +116,7 @@ router.post('/register', function (req, res) {
                 return res.json({
                     success: false,
                     error: [{
-                        msg: 'Placa já cadastrado.'
+                        msg: 'Placa já cadastrada.'
                     }]
                 })
             }
