@@ -40,18 +40,19 @@ router.post('/login', (req, res) => {
                 })
             } else {
                 console.log(user._id)
-                jwt.sign({'user':{
-                    '_id': user._id,
-                    'username': user.username,
-                    'password': user.password,
-                    'email': user.email,
-                    'name': user.name,
-                    'car': {
-                        'marca': user.marca,
-                        'modelo': user.modelo,
-                        'placa': user.placa
+                jwt.sign({
+                    'user': {
+                        '_id': user._id,
+                        'username': user.username,
+                        'password': user.password,
+                        'email': user.email,
+                        'name': user.name,
+                        'car': {
+                            'marca': user.marca,
+                            'modelo': user.modelo,
+                            'placa': user.placa
+                        }
                     }
-                }
                 }, constant.JWT_PUBLIC_KEY, {
                     expiresIn: '1d'
                 }, (err, token) => {
@@ -109,14 +110,14 @@ router.post('/register', function (req, res) {
             })
         }
 
-        User.getUserByUsername(username, (err, user) => {
+        User.getUserByPlate(placa, (err, user) => {
             if (err) throw err;
 
             if (user) {
                 return res.json({
                     success: false,
                     error: [{
-                        msg: 'Placa já cadastrado.'
+                        msg: 'Placa já cadastrada.'
                     }]
                 })
             }
@@ -144,6 +145,113 @@ router.post('/register', function (req, res) {
             });
         });
     });
+});
+
+router.post('/update', function (req, res) {
+    console.log('update')
+    console.log(req.body)
+
+    var _id = req.body._id;
+    var name = req.body.name;
+    var email = req.body.email;
+    var username = req.body.username;
+    var password = req.body.password;
+    var passwordConfirmation = req.body.passwordConfirmation;
+    var usertype = req.body.usertype;
+    var marca = req.body.car.marca;
+    var modelo = req.body.car.modelo;
+    var placa = req.body.car.placa;
+
+    req.checkBody('_id', 'O _id é obrigatório').notEmpty();
+    req.checkBody('name', 'Nome é obrigatório').notEmpty();
+    req.checkBody('email', 'E-mail é obrigatório').notEmpty();
+    req.checkBody('username', 'Nome de usuário é obrigatório').notEmpty();
+    req.checkBody('password', 'A senha é obrigatório').notEmpty();
+    req.checkBody('passwordConfirmation', 'A confirmação da senha é obrigatório').notEmpty();
+    req.checkBody('passwordConfirmation', 'As senhas não conferem').equals(req.body.password);
+    req.checkBody('usertype', 'O tipo de usuário é obrigatório').notEmpty();
+    req.checkBody('car.marca', 'A marca é obrigatória').notEmpty();
+    req.checkBody('car.modelo', 'O modelo é obrigatório').notEmpty();
+    req.checkBody('car.placa', 'A placa é obrigatório').notEmpty();
+
+    var errors = req.validationErrors();
+
+    if (req.validationErrors()) {
+        return res.send({
+            success: false,
+            error: errors
+        });
+    }
+
+    User.getUserById(_id, (err, user) => {
+        if (err) throw err;
+
+        user.name = name;
+        user.email = email;
+        user.username = username;
+        user.password = password;
+        user.marca = marca;
+        user.modelo = modelo;
+        user.placa = placa;
+        user.usertype = usertype;
+
+        //Para ele poder trocar de placa, é necessário verificar se
+        //ninguém já está usando a placa, caso contrário, uma mensagem
+        //de erro será retornada
+        User.getUserByPlate(placa, (err, mongouser) => {
+            if (mongouser) {
+                if (mongouser._doc._id != _id) {
+                    return res.json({
+                        success: false,
+                        error: [{
+                            msg: 'A placa já está cadastrada no sistema.'
+                        }]
+                    })
+                } else {
+                    User.updateUser(user, _id, function (err, user) {
+                        if (err) throw err;
+                        console.log(user);
+                        return res.json({
+                            success: true,
+                            message: 'Usuário alterado com sucesso'
+                        });
+                    });
+                }
+            } else {
+                User.updateUser(user, _id, function (err, user) {
+                    if (err) throw err;
+                    console.log(user);
+                    return res.json({
+                        success: true,
+                        message: 'Usuário alterado com sucesso'
+                    });
+                });
+            }
+        });
+    })
+});
+
+router.get('/:id', function (req, res) {
+
+    var id = req.params.id;
+
+    if (!id) {
+        return res.json({
+            success: false,
+            error: [{
+                msg: 'O id é obrigatório.'
+            }]
+        })
+    }
+
+    User.getUserById(id, (err, user) => {
+        if (err) throw err;
+
+        return res.json({
+            success: true,
+            user: user
+        });
+    })
 });
 
 module.exports = router;

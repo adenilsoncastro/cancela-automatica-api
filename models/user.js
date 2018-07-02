@@ -40,7 +40,16 @@ module.exports.createUser = function (newUser, callback) {
     newUser.save(callback);
 };
 
-module.exports.getUserByUsernameAndPassword = function (username, password, usertype,callback) {
+module.exports.updateUser = function (user, id, callback) {
+    console.log(user)
+    User.update({
+        _id: mongoose.Types.ObjectId(id)
+    }, user, {
+        upsert: false
+    }, callback);
+};
+
+module.exports.getUserByUsernameAndPassword = function (username, password, usertype, callback) {
     var query = {
         username: username,
         password: password,
@@ -60,6 +69,15 @@ module.exports.getUserByUsername = function (username, callback) {
 
 module.exports.getUserByPlate = function (platenumber, callback) {
     var query = {
+        placa: platenumber
+    };
+    console.log(query)
+    User.findOne(query, callback);
+}
+
+module.exports.getUserByIdAndPlate = function (id, platenumber, callback) {
+    var query = {
+        _id: id,
         placa: platenumber
     };
     console.log(query)
