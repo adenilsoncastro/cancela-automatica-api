@@ -39,6 +39,14 @@ router.post('/login', (req, res) => {
                     }]
                 })
             } else {
+                if (!user.approved) {
+                    return res.json({
+                        success: false,
+                        error: [{
+                            msg: 'O usuário está em aprovação.'
+                        }]
+                    })
+                }
                 console.log(user._id)
                 jwt.sign({
                     'user': {
@@ -77,6 +85,7 @@ router.post('/register', function (req, res) {
     var marca = req.body.car.marca;
     var modelo = req.body.car.modelo;
     var placa = req.body.car.placa;
+    var approved = false;
 
     req.checkBody('name', 'Nome é obrigatório').notEmpty();
     req.checkBody('email', 'E-mail é obrigatório').notEmpty();
@@ -130,7 +139,8 @@ router.post('/register', function (req, res) {
                 marca: marca,
                 modelo: modelo,
                 placa: placa,
-                usertype: usertype
+                usertype: usertype,
+                approved: approved
             });
 
             console.log(newUser);
@@ -231,6 +241,19 @@ router.post('/update', function (req, res) {
     })
 });
 
+router.get('/unapproved', function (req, res) {
+    console.log(req);
+    console.log('get unapproved');
+    User.getUnapproved((err, users) => {
+        if (err) throw err;
+
+        return res.json({
+            success: true,
+            users: users
+        });
+    })
+});
+
 router.get('/:id', function (req, res) {
 
     var id = req.params.id;
@@ -252,6 +275,42 @@ router.get('/:id', function (req, res) {
             user: user
         });
     })
+});
+
+router.post('/approve', function (req, res) {
+    console.log('approve')
+    console.log(req.body)
+
+    var _id = req.param('userId');
+    var approved = req.param('approved');
+
+    req.checkBody('_id', 'O _id é obrigatório').notEmpty();
+    req.checkBody('approved', 'A situação é obrigatória').notEmpty();
+
+    var errors = req.validationErrors();
+
+    if (req.validationErrors()) {
+        return res.send({
+            success: false,
+            error: errors
+        });
+    }
+
+    User.approve(_id, approved, function (err, user) {
+        if (err) throw err;
+        console.log(user);
+        return res.json({
+            success: true,
+            message: 'Usuário aprovado com sucesso'
+        });
+    });
+
+    // User.getUserById(_id, (err, user) => {
+    //         if (err) throw err;
+
+
+    //     }
+    // );
 });
 
 module.exports = router;

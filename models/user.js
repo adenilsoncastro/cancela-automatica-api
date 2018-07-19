@@ -30,6 +30,9 @@ var UserSchema = mongoose.Schema({
     },
     usertype: {
         type: Number
+    },
+    approved: {
+        type: Boolean
     }
 });
 
@@ -49,6 +52,16 @@ module.exports.updateUser = function (user, id, callback) {
     }, callback);
 };
 
+module.exports.approve = function (id, approved, callback) {
+    console.log(user)
+    User.findOneAndUpdate({
+        _id: mongoose.Types.ObjectId(id),
+        approved: approved
+    }, user, {
+        upsert: false
+    }, callback);
+};
+
 module.exports.getUserByUsernameAndPassword = function (username, password, usertype, callback) {
     var query = {
         username: username,
@@ -58,6 +71,12 @@ module.exports.getUserByUsernameAndPassword = function (username, password, user
     console.log('query: ')
     console.log(query)
     User.findOne(query, callback);
+}
+
+module.exports.getUnapproved = function (callback) {
+    User.find({
+        approved: false
+    }, callback);
 }
 
 module.exports.getUserByUsername = function (username, callback) {

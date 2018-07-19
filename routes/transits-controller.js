@@ -109,4 +109,43 @@ router.get('/countOfToday', (req, res) => {
     }
 });
 
+router.get('/getallbytoday', (req, res) => {
+    console.log('\ngetallbytoday: ')
+    console.log('headers: ' + req.headers['token'])
+
+    jwt.verify(req.headers['token'], constant.JWT_PUBLIC_KEY, function (err, decoded) {
+        if (err) {
+            console.log(err)
+            res.send({
+                success: false,
+                error: [{
+                    'param': req.headers['token'],
+                    'msg': 'O token é inválido'
+                }]
+            })
+        } else {
+            console.log(decoded)
+        }
+    });
+
+    Transit.getAllByToday(function (err, transits) {
+        if (err)
+            throw err;
+        if (!transits) {
+            return res.json({
+                success: false,
+                error: [{
+                    msg: 0
+                }]
+            })
+        } else {
+            return res.json({
+                success: true,
+                data: transits,
+                error: []
+            })
+        }
+    });
+});
+
 module.exports = router;
