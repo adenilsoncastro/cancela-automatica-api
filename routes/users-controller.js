@@ -242,9 +242,20 @@ router.post('/update', function (req, res) {
 });
 
 router.get('/unapproved', function (req, res) {
-    console.log(req);
     console.log('get unapproved');
     User.getUnapproved((err, users) => {
+        if (err) throw err;
+
+        return res.json({
+            success: true,
+            users: users
+        });
+    })
+});
+
+router.get('/approved', function (req, res) {
+    console.log('get approved');
+    User.getApproved((err, users) => {
         if (err) throw err;
 
         return res.json({
@@ -284,7 +295,7 @@ router.post('/approve', function (req, res) {
     var _id = req.param('userId');
     var approved = req.param('approved');
 
-    req.checkBody('_id', 'O _id é obrigatório').notEmpty();
+    req.checkBody('userId', 'O _id é obrigatório').notEmpty();
     req.checkBody('approved', 'A situação é obrigatória').notEmpty();
 
     var errors = req.validationErrors();

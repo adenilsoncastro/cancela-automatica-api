@@ -53,14 +53,18 @@ module.exports.updateUser = function (user, id, callback) {
 };
 
 module.exports.approve = function (id, approved, callback) {
-    console.log(user)
+
     User.findOneAndUpdate({
-        _id: mongoose.Types.ObjectId(id),
-        approved: approved
-    }, user, {
-        upsert: false
-    }, callback);
-};
+            _id: mongoose.Types.ObjectId(id),
+        }, {
+            $set: {
+                'approved': approved
+            }
+        }, {
+            upsert: false
+        },
+        callback);
+}
 
 module.exports.getUserByUsernameAndPassword = function (username, password, usertype, callback) {
     var query = {
@@ -76,6 +80,12 @@ module.exports.getUserByUsernameAndPassword = function (username, password, user
 module.exports.getUnapproved = function (callback) {
     User.find({
         approved: false
+    }, callback);
+}
+
+module.exports.getApproved = function (callback) {
+    User.find({
+        approved: true
     }, callback);
 }
 
