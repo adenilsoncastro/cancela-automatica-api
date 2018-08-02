@@ -11,8 +11,10 @@ router.post('/checkforexistence', (req, res) => {
     console.log('check for existence:')
     var plate = req.body.plate;
     var img = req.body.img;
+    var barrierId = req.body.barrierId;
 
     req.checkBody('plate', 'O número da placa é obrigatório').notEmpty();
+    req.checkBody('barrierId', 'O número da cancela é obrigatório').notEmpty();
 
     var errors = req.validationErrors();
 
@@ -33,7 +35,7 @@ router.post('/checkforexistence', (req, res) => {
                 var newTransit = new Transit({
                     userId: user._id,
                     img: img,
-                    automaticBarrierId: 1,
+                    automaticBarrierId: barrierId,
                     automaticBarrierLocatioName: 'Universidade Positivo',
                     date: new Date()
                 })

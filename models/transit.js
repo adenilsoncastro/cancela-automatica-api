@@ -49,17 +49,28 @@ module.exports.getCountByToday = function (userId, callback) {
     Transit.count(query, callback);
 }
 
+module.exports.todayCountByBarrier = function (callback) {
+
+    var query = [{
+        "$match": {
+            "date": {
+                "$lt": new Date(),
+                "$gte": new Date(new Date().setDate(new Date().getDate() - 1))
+            }
+        },
+    }, {
+        "$group": {
+            _id: "$automaticBarrierId",
+            count: {
+                "$sum": 1
+            }
+        }
+    }];
+
+    Transit.aggregate(query, callback);
+}
+
 module.exports.getAllByToday = function (callback) {
-    var today = moment().startOf('day')
-    var tomorrow = moment(today).add(1, 'days')
-
-    // var query = {
-    //     date: {
-    //         $gte: today,
-    //         $lt: tomorrow
-    //     }
-    // };
-
     var query = [{
         "$match": {
             "date": {
