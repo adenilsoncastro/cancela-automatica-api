@@ -79,13 +79,15 @@ module.exports.getUserByUsernameAndPassword = function (username, password, user
 
 module.exports.getUnapproved = function (callback) {
     User.find({
-        approved: false
+        approved: false,
+        usertype: 1
     }, callback);
 }
 
 module.exports.getApproved = function (callback) {
     User.find({
-        approved: true
+        approved: true,
+        usertype: 1
     }, callback);
 }
 

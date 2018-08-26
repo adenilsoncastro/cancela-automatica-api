@@ -157,7 +157,7 @@ router.post('/register', function (req, res) {
     });
 });
 
-router.post('/update', function (req, res) {
+router.put('/update', function (req, res) {
     console.log('update')
     console.log(req.body)
 
@@ -292,6 +292,19 @@ router.post('/approve', function (req, res) {
     console.log('approve')
     console.log(req.body)
 
+    jwt.verify(req.headers['token'], constant.JWT_PUBLIC_KEY, function (err, decoded) {
+        if (err) {
+            console.log(err)
+            res.send({
+                success: false,
+                error: [{
+                    'param': req.headers['token'],
+                    'msg': 'O token é inválido'
+                }]
+            })
+        }
+    });
+
     var _id = req.param('userId');
     var approved = req.param('approved');
 
@@ -312,16 +325,9 @@ router.post('/approve', function (req, res) {
         console.log(user);
         return res.json({
             success: true,
-            message: 'Usuário aprovado com sucesso'
+            message: 'Situação do usuário alterada com sucesso!'
         });
     });
-
-    // User.getUserById(_id, (err, user) => {
-    //         if (err) throw err;
-
-
-    //     }
-    // );
 });
 
 module.exports = router;
