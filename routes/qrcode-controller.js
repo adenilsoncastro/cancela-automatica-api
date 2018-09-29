@@ -13,8 +13,9 @@ router.post('/checkgeneratedid', (req, res) => {
     console.log(req.body)
     console.log(req.body.generatedId)
     var generatedId = req.body.generatedId;
+    var barrierId = 1;
 
-    req.checkBody('id', 'O id do usuário é obrigatório').notEmpty();
+    req.checkBody('generatedId', 'O id do usuário é obrigatório').notEmpty();
 
     var errors = req.validationErrors();
 
@@ -32,6 +33,18 @@ router.post('/checkgeneratedid', (req, res) => {
                     }]
                 })
             } else {
+                var newTransit = new Transit({
+                    userId: user._id,
+                    automaticBarrierId: barrierId,
+                    automaticBarrierLocatioName: 'Universidade Positivo',
+                    date: new Date()
+                })
+
+                Transit.create(newTransit, function (err, transit) {
+                    if (err) throw err;
+                    console.log(transit);
+                });
+
                 return res.json({
                     success: true,
                     user: user,
