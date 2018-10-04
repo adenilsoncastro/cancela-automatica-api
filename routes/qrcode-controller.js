@@ -22,7 +22,7 @@ router.post('/checkgeneratedid', (req, res) => {
     if (errors) {
         res.send(errors);
     } else {
-        User.getUserById(generatedId, function (err, user) {
+        User.getApprovedUserById(generatedId, function (err, user) {
             if (err)
                 throw err;
             if (!user) {

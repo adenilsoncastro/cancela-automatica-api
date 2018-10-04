@@ -106,6 +106,15 @@ module.exports.getUserByPlate = function (platenumber, callback) {
     User.findOne(query, callback);
 }
 
+module.exports.getApprovedUserByPlate = function (platenumber, callback) {
+    var query = {
+        placa: platenumber,
+        approved: true
+    };
+    console.log(query)
+    User.findOne(query, callback);
+}
+
 module.exports.getUserByIdAndPlate = function (id, platenumber, callback) {
     var query = {
         _id: id,
@@ -117,4 +126,12 @@ module.exports.getUserByIdAndPlate = function (id, platenumber, callback) {
 
 module.exports.getUserById = function (id, callback) {
     User.findById(id, callback);
+}
+
+module.exports.getApprovedUserById = function (id, callback) {
+    var query = {
+        _id: id,
+        approved: true
+    };
+    User.findOne(query, callback);
 }

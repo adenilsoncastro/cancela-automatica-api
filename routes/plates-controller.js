@@ -21,7 +21,7 @@ router.post('/checkforexistence', (req, res) => {
     if (errors) {
         res.send(errors);
     } else {
-        User.getUserByPlate(plate, function (err, user) {
+        User.getApprovedUserByPlate(plate, function (err, user) {
             if (err)
                 throw err;
             if (!user) {
