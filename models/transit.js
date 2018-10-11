@@ -24,7 +24,6 @@ var TransitSchema = mongoose.Schema({
 var Transit = module.exports = mongoose.model('Transit', TransitSchema);
 
 module.exports.create = function (newTransit, callback) {
-    console.log(newTransit)
     newTransit.save(callback);
 };
 

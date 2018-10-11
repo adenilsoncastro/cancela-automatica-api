@@ -1,10 +1,15 @@
 var express = require('express');
 var router = express.Router();
 var User = require('../models/user');
+var Token = require('../models/token');
 var Transit = require('../models/transit')
 const checkAuth = require('../middleware/check-auth');
 const jwt = require('jsonwebtoken');
 const multer = require('multer')
+
+var FCM = require('fcm-node');
+var serverKey = 'AAAA6ACQL1Y:APA91bG_a8Mk9WAZ0AJ46ZzJzj9xVi3LuXAOjeSYrWqeW9UDdg7XmzIq2eVSDLkC_yI7dD-uX4332fGqKtuBJvx12u3nLEQi_Pa7b8rlEix1A5KcwEh79V4vhduC-_kQ8Z01L9Gux8hu';
+var fcm = new FCM(serverKey);
 
 router.post('/checkforexistence', (req, res) => {
 
@@ -43,6 +48,32 @@ router.post('/checkforexistence', (req, res) => {
                 Transit.create(newTransit, function (err, transit) {
                     if (err) throw err;
                     console.log(transit);
+                });
+
+                console.log(user._id.toString());
+                Token.getTokenByUserId(user._id.toString(), function(err, token) {
+                    if (err) throw err;
+                    console.log(token)
+                    console.log(token.token)
+                    var message = {
+                        to: token.token,
+                        notification: {
+                            title: 'Cancela automática',
+                            body: 'Veículo autorizado a transitar pela cancela'
+                        },
+                        data: {
+                            my_key: user._id,
+                            my_another_key: 'my another value'
+                        }
+                    };
+
+                    fcm.send(message, function (err, response) {
+                        if (err) {
+                            console.log("Something has gone wrong!");
+                        } else {
+                            console.log("Successfully sent with response: ", response);
+                        }
+                    });
                 });
 
                 return res.json({

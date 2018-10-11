@@ -7,8 +7,31 @@ const url = 'mongodb://localhost:27017/loginapp';
 const dbName = 'loginapp';
 
 var FCM = require('fcm-node');
-var serverKey = 'AAAAiN9rzHQ:APA91bGg2iJzfazFqX5psaysqqz3frbXuGTEGa8msCOlox87XrR8RYZNORNhhcbCSO-q45WJqNZuY__8a4ckp1Bz5IOLiKYoeL1WEod6JmjnglAyuVmPrP6gZ2aRa9WHh2ruU1hyK4ew';
+var serverKey = 'AAAA6ACQL1Y:APA91bG_a8Mk9WAZ0AJ46ZzJzj9xVi3LuXAOjeSYrWqeW9UDdg7XmzIq2eVSDLkC_yI7dD-uX4332fGqKtuBJvx12u3nLEQi_Pa7b8rlEix1A5KcwEh79V4vhduC-_kQ8Z01L9Gux8hu';
 var fcm = new FCM(serverKey);
+
+// router.post('/store', (req, res) => {
+
+//     var token = req.body.token;
+//     var userId = req.body.userId;
+
+//     MongoClient.connect(url, (err, client) => {
+//         if (err) throw err;
+//         else {
+//             let db = client.db(dbName);
+
+//             db.collection('tokens').remove({'userId': userId}, (err, body) => {
+//                 if (err) throw err;
+                
+//                 db.collection('tokens').insertOne({'token': token, 'userId': userId}, (err2, body2) => {
+//                     client.close();
+//                     if (err2) throw err2;
+//                     res.status(200).send('oi');
+//                 })
+//             })
+//         }
+//     });
+// });
 
 router.post('/store', (req, res) => {
 
@@ -24,9 +47,9 @@ router.post('/store', (req, res) => {
                 if (err) throw err;
                 
                 db.collection('tokens').insertOne({'token': token, 'userId': userId}, (err2, body2) => {
-                    client.close();
                     if (err2) throw err2;
-                    res.status(200).send('');
+ 
+                    res.status(200).send('oi');
                 })
             })
         }
