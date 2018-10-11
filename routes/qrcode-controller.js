@@ -6,6 +6,11 @@ var Transit = require('../models/transit')
 
 const checkAuth = require('../middleware/check-auth');
 const jwt = require('jsonwebtoken');
+var Token = require('../models/token');
+
+var FCM = require('fcm-node');
+var serverKey = 'AAAA6ACQL1Y:APA91bG_a8Mk9WAZ0AJ46ZzJzj9xVi3LuXAOjeSYrWqeW9UDdg7XmzIq2eVSDLkC_yI7dD-uX4332fGqKtuBJvx12u3nLEQi_Pa7b8rlEix1A5KcwEh79V4vhduC-_kQ8Z01L9Gux8hu';
+var fcm = new FCM(serverKey);
 
 router.post('/checkgeneratedid', (req, res) => {
 
@@ -45,18 +50,15 @@ router.post('/checkgeneratedid', (req, res) => {
                     console.log(transit);
                 });
 
-                Token.getTokenByUserId('teste', function(err, token) {
+                console.log(user._id.toString());
+                Token.getTokenByUserId(user._id.toString(), function(err, token) {
                     if (err) throw err;
-
+                    
                     var message = {
-                        to: 'eoD2CuXccYs:APA91bFGg9sLa7ZTHg31_88OxrT0WG_JZbsuta19avDVBnsoDcfPR89_J-N0xxqHQobw35mS_fj_vHrXLrFYUPjCinkb75dI9f261Bn6orweVcBv97QmmXHMYVf7x1-SSyQ7J5XHliqA',
+                        to: token.token,
                         notification: {
                             title: 'Cancela automática',
                             body: 'Veículo autorizado a transitar pela cancela'
-                        },
-                        data: {
-                            my_key: user._id,
-                            my_another_key: 'my another value'
                         }
                     };
 

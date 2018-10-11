@@ -50,11 +50,9 @@ router.post('/checkforexistence', (req, res) => {
                     console.log(transit);
                 });
 
-                console.log(user._id.toString());
                 Token.getTokenByUserId(user._id.toString(), function(err, token) {
                     if (err) throw err;
-                    console.log(token)
-                    console.log(token.token)
+                    
                     var message = {
                         to: token.token,
                         notification: {
